@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setu | Where giving meets needs.</title>
+    <meta name="description" content="Setu: A new human-first platform connecting those who want to give with those in need. Launching soon.">
+
+    <!--
+    ================================================================================================
+    README: SETU LANDING PAGE
+    ================================================================================================
+
+    This is a self-contained 'Coming Soon' landing page. No build step is required.
+
+    1. FONTS USED
+    - Logo/UI: 'Raleway', sans-serif (Fallback: Quicksand, sans-serif)
+    - Headlines: 'Playfair Display', serif (Fallback: Cormorant Infant, serif)
+    - Body Text: 'Karla', sans-serif (Fallback: Work Sans, sans-serif)
+    - Fonts are loaded from Google Fonts below.
+
+    2. FORM SUBMISSION ENDPOINT
+    - The "Work with us" and "Notify me" forms POST JSON data.
+    - To set your backend endpoint, find the `FORM_ENDPOINT` constant in the <script>
+      tag at the bottom of this file and replace the placeholder URL.
+    - A demo mode is enabled by default, which simulates a successful submission.
+
+    3. CUSTOMIZATION
+    - Brand Colors: All colors are defined as CSS variables under the `:root` selector
+      in the <style> tag. You can easily swap these hex codes to re-brand the page.
+    - Role List: The job roles in the "Work with us" modal are in the <select> element
+      with the id "role". You can add/remove <option> and <optgroup> tags there directly.
+
+    4. DEPLOYMENT
+    - This single index.html file can be deployed on any static hosting provider like
+      Vercel, Netlify, GitHub Pages, or a simple server (e.g., using `npx serve`).
+
+    5. CONVERTING TO A REACT/TAILWIND COMPONENT
+    - Structure: The main content is inside `<main>`. The modals are separate siblings.
+      This maps well to a React component structure (e.g., <Layout><Hero /><Roles /></Layout>).
+    - Styling: CSS variables can be mapped to a Tailwind config `theme.extend.colors`.
+      The custom animations (`fadeInUp`, `pulse`) can be added to `tailwind.config.js`.
+      The rest of the styling uses standard CSS properties that have direct Tailwind class equivalents.
+    - State Management: Use `useState` for modal visibility, form inputs, and submission status.
+      The form submission logic inside `handleFormSubmit` can be reused with minor changes.
+    - Parallax/Interaction: The pointer/tilt logic can be moved into a React Hook (`useParallax`).
+
+    ================================================================================================
+    -->
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Playfair+Display:wght@700;900&family=Raleway:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. Theming & Variables
+           ========================================================================== */
+        :root {
+            /* Brand Colors */
+            --color-primary: #E2725B; /* Warm Terracotta */
+            --color-secondary: #F5E6CA; /* Sand Beige */
+            --color-accent: #8BA888; /* Olive Green */
+            --color-background: #FFF8F1; /* Cream White */
+            --color-text: #3E2723; /* Deep Brown */
+            --color-text-light: #6d4c41;
+            --color-white: #FFFFFF;
+            --color-error: #c0392b;
+
+            /* Typography */
+            --font-logo: 'Raleway', 'Quicksand', sans-serif;
+            --font-display: 'Playfair Display', 'Cormorant Infant', serif;
+            --font-body: 'Karla', 'Work Sans', sans-serif;
+
+            /* Spacing & Radius */
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1.5rem;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+        }
+
+        /* ==========================================================================
+           2. Base & Reset
+           ========================================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Hide body scrollbar when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* ==========================================================================
+           3. Cursor & Parallax Background
+           ========================================================================== */
+        .cursor {
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+            will-change: transform, width, height;
+        }
+
+        .cursor.hovered {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(226, 114, 91, 0.2);
+            border-color: transparent;
+        }
+        
+        @media (pointer: coarse) {
+            .cursor {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .parallax-bg .shape {
+            position: absolute;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            opacity: 0.1;
+            will-change: transform;
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .shape1 { top: 10%; left: 15%; width: 200px; height: 200px; background-color: var(--color-accent); filter: blur(50px); }
+        .shape2 { top: 70%; left: 80%; width: 300px; height: 300px; filter: blur(60px); }
+        .shape3 { top: 50%; left: 5%; width: 150px; height: 150px; background-color: var(--color-secondary); filter: blur(40px); }
+        .shape4 { top: 20%; left: 75%; width: 250px; height: 250px; background-color: var(--color-accent); opacity: 0.05; filter: blur(70px); }
+        .shape5 { bottom: 5%; left: 40%; width: 180px; height: 180px; filter: blur(50px); }
+
+        /* ==========================================================================
+           4. Layout & Main Sections
+           ========================================================================== */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 2rem;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .hero {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        footer {
+            padding: 2rem 0;
+            border-top: 1px solid rgba(62, 39, 35, 0.1);
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           5. Typography & Content
+           ========================================================================== */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 6rem; font-weight: 900; letter-spacing: -2px; }
+        .logo { font-family: var(--font-logo); font-size: 2rem; font-weight: 700; text-decoration: none; color: var(--color-text); animation: fadeInUp 0.5s ease-out backwards; }
+        .tagline { font-family: var(--font-display); font-size: 2rem; margin-top: 0.5rem; color: var(--color-text-light); animation: fadeInUp 0.5s 0.2s ease-out backwards; }
+        .description { font-size: 1.2rem; max-width: 600px; margin: 1.5rem auto 0; animation: fadeInUp 0.5s 0.4s ease-out backwards; }
+        .kpi-line { font-family: var(--font-logo); font-weight: 500; margin-top: 2rem; font-size: 0.9rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--color-text-light); animation: fadeInUp 0.5s 0.6s ease-out backwards; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-buttons {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.5s 0.8s ease-out backwards;
+        }
+        
+        .roles-preview {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .roles-preview h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            text-align: left;
+        }
+        .role-card {
+            background: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .role-card h3 {
+            font-family: var(--font-logo);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        .role-card p {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+        }
+
+
+        /* ==========================================================================
+           6. Buttons & Forms
+           ========================================================================== */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-logo);
+            font-weight: 700;
+            padding: 0.8rem 1.8rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            border: 2px solid transparent;
+            cursor: none;
+            transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+        .btn-primary { background-color: var(--color-primary); color: var(--color-white); }
+        .btn-primary:hover { background-color: #d6634c; }
+
+        .btn-secondary { background-color: transparent; color: var(--color-primary); border-color: var(--color-primary); }
+        .btn-secondary:hover { background-color: var(--color-primary); color: var(--color-white); }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            cursor: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(226, 114, 91, 0.2);
+        }
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-error {
+            color: var(--color-error);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .form-control.is-invalid {
+            border-color: var(--color-error);
+        }
+        .form-control.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+        }
+        .is-invalid + .form-error {
+            display: block;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .checkbox-group input {
+            width: 1.25em;
+            height: 1.25em;
+            cursor: none;
+        }
+        .checkbox-group label {
+            cursor: none;
+            accent-color: var(--color-primary);
+        }
+
+        /* For auto-sizing input */
+        .form-control-auto-size {
+            display: inline-block;
+            width: auto;
+            min-width: 200px; /* Start with a minimum width */
+            max-width: 100%;
+            transition: width 0.2s ease-in-out;
+        }
+
+        .notify-form {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 400px;
+            margin: 1.5rem auto 0;
+            animation: fadeInUp 0.5s 0.9s ease-out backwards;
+        }
+        .notify-form .form-control {
+            flex-grow: 1;
+        }
+
+        /* ==========================================================================
+           7. Modal
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(62, 39, 35, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--color-white);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-20px) scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+
+        .modal-overlay.is-visible .modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-header h2 {
+            font-size: 2rem;
+        }
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0.5rem;
+            cursor: none;
+            color: var(--color-text-light);
+        }
+
+        .modal-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .success-message h2 { font-size: 2.5rem; color: var(--color-accent); }
+        .success-message p { max-width: 400px; margin: 1rem auto 2rem; }
+        .social-links { display: flex; justify-content: center; gap: 1rem; }
+        .social-links a { color: var(--color-text-light); text-decoration: none; font-size: 1.5rem; transition: color 0.2s, transform 0.2s; }
+        .social-links a:hover { color: var(--color-primary); transform: scale(1.1); }
+
+        /* ==========================================================================
+           8. Footer
+           ========================================================================== */
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .footer-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* ==========================================================================
+           9. Responsive Design
+           ========================================================================== */
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .tagline { font-size: 1.5rem; }
+            .description { font-size: 1.1rem; }
+            .container { padding: 0 1rem; }
+            .hero { padding: 2rem 0; }
+            .cta-buttons { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; max-width: 320px; text-align: center; margin-left: auto; margin-right: auto; }
+            .modal-overlay { align-items: center; padding: 1rem; }
+            .modal { max-height: 90vh; overflow-y: auto; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 3rem; }
+            .tagline { font-size: 1.25rem; }
+            .description { font-size: 1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Pointer/Cursor -->
+    <div class="cursor" aria-hidden="true"></div>
+
+    <!-- Parallax Background Elements -->
+    <div class="parallax-bg" aria-hidden="true">
+        <div class="shape shape1" data-speed="-2"></div>
+        <div class="shape shape2" data-speed="1"></div>
+        <div class="shape shape3" data-speed="3"></div>
+        <div class="shape shape4" data-speed="-1"></div>
+        <div class="shape shape5" data-speed="2"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <header class="hero">
+                <a href="#" class="logo">Setu</a>
+                <p class="tagline">Where giving meets needs.</p>
+                <p class="description">We are building a space, a bridge, where we connect generosity, with those truly in need--in a simple yet powerful manner. Because it's not that our world does not have enough. It's that enough is improperly placed.</p>
+                <p class="kpi-line">Launching soon &mdash; Join us in building a better way to give.</p>
+
+                <div class="cta-buttons">
+                    <button id="open-modal-btn" class="btn btn-primary" data-interactive>Work with us</button>
+                    <button id="open-notify-modal-btn" class="btn btn-secondary" data-interactive>Notify me</button>
+                </div>
+
+            </header>
+
+        </div>
+        
+        <footer id="footer-notify">
+            <div class="container footer-content">
+                <p>&copy; 2025 Setu. All rights reserved. Building a bridge for humanity.</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- "Notify me" Modal -->
+    <div class="modal-overlay" id="notify-me-modal" role="dialog" aria-modal="true" aria-labelledby="notify-modal-title" hidden>
+        <div class="modal" style="max-width: 500px;">
+            <div id="notify-form-container">
+                <div class="modal-header">
+                    <h2 id="notify-modal-title">Get Notified</h2>
+                    <button class="modal-close-btn" aria-label="Close modal" data-interactive>&times;</button>
+                </div>
+                <form id="notify-me-form" novalidate style="text-align: center; padding: 1rem 0;">
+                    <p style="margin-bottom: 1.5rem;">Enter your email to get notified when we launch.</p>
+                    <div class="form-group" style="margin-bottom: 2rem; text-align: center;">
+                        <input type="email" id="notify-email" name="email" class="form-control form-control-auto-size" placeholder="your.email@example.com" required data-interactive>
+                        <div class="form-error">Please enter a valid email address.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-interactive>Notify me!</button>
+                </form>
+            </div>
+            <div id="notify-success-container" class="success-message" hidden>
+                <h2>You're on the list!</h2>
+                <p>Thank you for your interest. We'll send you an update as soon as we're ready to launch. Stay tuned!</p>
+                <div class="modal-footer" style="justify-content:center; border-top:none; margin-top:1rem;">
+                    <button type="button" class="btn btn-primary modal-close-btn" data-interactive>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- "Work with us" Modal -->
+    <div class="modal-overlay" id="work-with-us-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+        <div class="modal">
+            <div id="form-container">
+                <div class="modal-header">
+                    <h2 id="modal-title">Work with Setu</h2>
+                    <button class="modal-close-btn" aria-label="Close modal" data-interactive>&times;</button>
+                </div>
+                <form id="work-with-us-form" novalidate>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" required data-interactive>
+                        <div class="form-error">Please enter your full name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required data-interactive>
+                        <div class="form-error">Please enter a valid email address.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone (Optional)</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" data-interactive>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location / City (Optional)</label>
+                        <input type="text" id="location" name="location" class="form-control" data-interactive>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" class="form-control" required data-interactive>
+                            <option value="" disabled selected>Select a role...</option>
+                            <optgroup label="Director roles">
+                                <option value="Director of Operations">Director of Operations</option>
+                                <option value="Director of Communications and Outreach">Director of Communications and Outreach</option>
+                                <option value="Director of Technology">Director of Technology</option>
+                                <option value="Director of Design and Experience">Director of Design and Experience</option>
+                                <option value="Director of Marketing">Director of Marketing</option>
+                            </optgroup>
+                            <optgroup label="Core roles">
+                                <option value="Flutter Developer">Flutter Developer</option>
+                                <option value="Full Stack Developer">Full Stack Developer</option>
+                                <option value="Mobile App Developer">Mobile App Developer</option>
+                                <option value="Marketing Content Producer">Marketing Content Producer</option>
+                                <option value="Creative Content Writer">Creative Content Writer</option>
+                                <option value="Campus Ambassador">Campus Ambassador</option>
+                                <option value="Video Editor">Video Editor</option>
+                                <option value="Research & Insights Analyst">Research & Insights Analyst</option>
+                            </optgroup>
+                        </select>
+                        <div class="form-error">Please select a role.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Why you want to join (Optional, max 800 characters)</label>
+                        <textarea id="message" name="message" class="form-control" maxlength="800" data-interactive></textarea>
+                    </div>
+                     <div class="form-group">
+                        <label for="portfolio">Resume / Portfolio Link (Optional)</label>
+                        <input type="url" id="portfolio" name="portfolio" class="form-control" placeholder="https://..." data-interactive>
+                         <div class="form-error">Please enter a valid URL.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="resumeFile">Upload Resume (Optional)</label>
+                        <input type="file" id="resumeFile" name="resumeFile" class="form-control" data-interactive>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="consent" name="consent" required data-interactive>
+                        <label for="consent">I agree to be contacted by Setu about this opportunity.</label>
+                    </div>
+                     <div class="form-error" id="consent-error" style="margin-top:-1rem; margin-bottom:1rem; display: none;">You must agree to be contacted.</div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary modal-cancel-btn" data-interactive>Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-interactive>Submit Application</button>
+                    </div>
+                </form>
+            </div>
+            <div id="success-container" class="success-message" hidden>
+                <h2>Thank You!</h2>
+                <p>We’ve received your interest. We appreciate you taking the time to reach out and will be in touch if there’s a potential fit. Meanwhile, follow Setu's journey!</p>
+                <div class="modal-footer" style="justify-content:center; border-top:none; margin-top:1rem;">
+                    <button type="button" class="btn btn-primary modal-close-btn" data-interactive>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <noscript>
+        <div style="padding: 2rem; text-align: center; background: #fff; color: #000;">
+            <h1>JavaScript is Required</h1>
+            <p>This page uses JavaScript for its interactive features and forms. Please enable JavaScript in your browser to continue.</p>
+            <p>To express interest in working with Setu, please email us at <a href="mailto:hello@setu.org">hello@setu.org</a>.</p>
+        </div>
+    </noscript>
+
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ==========================================================================
+        // CONFIGURATION
+        // ==========================================================================
+        // --- Supabase Client Initialization ---
+        const SUPABASE_URL = 'https://ozfwuoxtedzjkgncvvva.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Znd1b3h0ZWR6amtnbmN2dnZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MDU4ODcsImV4cCI6MjA3NjA4MTg4N30.LxxsKPhNQGb0hWWCPVzSTSchiN5uqM5mKwJbqmBsa4c';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // ==========================================================================
+        // ELEMENT SELECTORS
+        // ==========================================================================
+        const cursor = document.querySelector('.cursor');
+        const parallaxShapes = document.querySelectorAll('.parallax-bg .shape');
+        const interactiveEls = document.querySelectorAll('[data-interactive]');
+        const modal = document.getElementById('work-with-us-modal');
+        const notifyModal = document.getElementById('notify-me-modal');
+        const openModalBtn = document.getElementById('open-modal-btn');
+        const openNotifyModalBtn = document.getElementById('open-notify-modal-btn');
+        const closeModalBtns = modal.querySelectorAll('.modal-close-btn, .modal-cancel-btn');
+        const closeNotifyModalBtns = notifyModal.querySelectorAll('.modal-close-btn');
+        const form = document.getElementById('work-with-us-form');
+        const notifyForm = document.getElementById('notify-me-form');
+        const autoSizeInput = document.getElementById('notify-email');
+
+        // ==========================================================================
+        // CURSOR & INTERACTIVITY
+        // ==========================================================================
+        const updateCursor = (e) => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        };
+        window.addEventListener('mousemove', updateCursor);
+
+        interactiveEls.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Auto-sizing input logic
+        if (autoSizeInput) {
+            const hiddenSizer = document.createElement('span');
+            hiddenSizer.style.font = getComputedStyle(autoSizeInput).font;
+            hiddenSizer.style.visibility = 'hidden';
+            hiddenSizer.style.position = 'absolute';
+            hiddenSizer.style.whiteSpace = 'pre';
+            document.body.appendChild(hiddenSizer);
+
+            autoSizeInput.addEventListener('input', () => {
+                hiddenSizer.textContent = autoSizeInput.value || autoSizeInput.placeholder;
+                autoSizeInput.style.width = `${hiddenSizer.offsetWidth + 4}px`; // +4 for a little padding
+            });
+        }
+
+
+        // ==========================================================================
+        // PARALLAX EFFECT
+        // ==========================================================================
+        let hasDeviceOrientation = false;
+
+        const handleDeviceOrientation = (e) => {
+            hasDeviceOrientation = true;
+            const beta = e.beta; // -180 to 180
+            const gamma = e.gamma; // -90 to 90
+
+            parallaxShapes.forEach(shape => {
+                const speed = shape.dataset.speed;
+                const offsetX = gamma * speed * 0.2;
+                const offsetY = beta * speed * 0.2;
+                shape.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            });
+        };
+
+        const handleMouseMoveParallax = (e) => {
+            if (hasDeviceOrientation) return; // Prioritize device tilt
+            const { clientX, clientY } = e;
+            const x = (clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+            const y = (clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+            parallaxShapes.forEach(shape => {
+                const speed = shape.dataset.speed;
+                const offsetX = x * speed * 20;
+                const offsetY = y * speed * 20;
+                shape.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            });
+        };
+        
+        // Check for device orientation support
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', handleDeviceOrientation);
+        }
+        window.addEventListener('mousemove', handleMouseMoveParallax);
+
+
+        // ==========================================================================
+        // MODAL LOGIC
+        // ==========================================================================
+        const openModal = (modalElement) => {
+            if (!modalElement) return;
+            modalElement.hidden = false;
+            document.body.classList.add('modal-open');
+            modalElement.classList.add('is-visible');
+            modalElement.querySelector('input, select, textarea, button').focus();
+        };
+
+        const closeModal = (modalElement) => {
+            if (!modalElement) return;
+            modalElement.classList.remove('is-visible');
+            document.body.classList.remove('modal-open');
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                modalElement.hidden = true;
+                // Reset form inside the modal
+                const formToReset = modalElement.querySelector('form');
+                if (formToReset) formToReset.reset();
+                modalElement.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+                // Reset success/form visibility
+                const formContainer = modalElement.querySelector('[id$="-form-container"]');
+                const successContainer = modalElement.querySelector('[id$="-success-container"]');
+                if (formContainer) formContainer.hidden = false;
+                if (successContainer) successContainer.hidden = true;
+            }, 300);
+        };
+
+        openModalBtn.addEventListener('click', () => openModal(modal));
+        openNotifyModalBtn.addEventListener('click', () => openModal(notifyModal));
+        closeModalBtns.forEach(btn => btn.addEventListener('click', () => closeModal(modal)));
+        closeNotifyModalBtns.forEach(btn => btn.addEventListener('click', () => closeModal(notifyModal)));
+        
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
+        notifyModal.addEventListener('click', (e) => { if (e.target === notifyModal) closeModal(notifyModal); });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('is-visible')) {
+                closeModal(modal);
+            } else if (e.key === 'Escape' && notifyModal.classList.contains('is-visible')) {
+                closeModal(notifyModal);
+            }
+        });
+
+        // ==========================================================================
+        // FORM VALIDATION & SUBMISSION
+        // ==========================================================================
+        const validateField = (field) => {
+            let isValid = true;
+            field.classList.remove('is-invalid');
+
+            if (field.required && !field.value.trim()) {
+                isValid = false;
+            }
+            if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+                isValid = false;
+            }
+            if (field.type === 'checkbox' && field.required && !field.checked) {
+                isValid = false;
+            }
+            if (field.type === 'url' && field.value && !/^(ftp|http|https):\/\/[^ "]+$/.test(field.value)) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                field.classList.add('is-invalid');
+            }
+            return isValid;
+        };
+
+        const validateForm = (formElement) => {
+            let allValid = true;
+            const fields = formElement.querySelectorAll('[required], input[type="email"], input[type="url"]');
+            fields.forEach(field => {
+                if (!validateField(field)) {
+                    allValid = false;
+                }
+            });
+
+            // Special check for consent checkbox to show specific error message
+            const consentCheckbox = formElement.querySelector('#consent');
+            const consentError = formElement.querySelector('#consent-error');
+            if(consentCheckbox && consentError) {
+                if(consentCheckbox.required && !consentCheckbox.checked) {
+                    consentError.style.display = 'block';
+                    allValid = false;
+                } else {
+                    consentError.style.display = 'none';
+                }
+            }
+
+
+            return allValid;
+        };
+        
+        const handleFormSubmit = async (e) => {
+            e.preventDefault();
+            const currentForm = e.target;
+            if (!validateForm(currentForm)) return;
+
+            const submitButton = currentForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+
+            try {
+                // --- NOTIFY ME FORM SUBMISSION ---
+                if (currentForm.id === 'notify-me-form') {
+                    const email = currentForm.querySelector('#notify-email').value;
+                    const { error } = await supabaseClient
+                        .from('subscribers')
+                        .insert({ email: email });
+
+                    if (error) throw error;
+
+                    currentForm.parentElement.hidden = true;
+                    document.getElementById('notify-success-container').hidden = false;
+                }
+
+                // --- WORK WITH US FORM SUBMISSION ---
+                if (currentForm.id === 'work-with-us-form') {
+                    const formData = new FormData(currentForm);
+                    const formProps = Object.fromEntries(formData.entries());
+                    let resumePublicUrl = null;
+
+                    // 1. Handle File Upload if a file is selected
+                    const resumeFile = formProps.resumeFile;
+                    if (resumeFile && resumeFile.size > 0) {
+                        // Create a unique file path to avoid name collisions
+                        const filePath = `public/${Date.now()}-${resumeFile.name.replace(/\s/g, '_')}`;
+                        
+                        const { data: uploadData, error: uploadError } = await supabaseClient
+                            .storage
+                            .from('resumes') // Your bucket name
+                            .upload(filePath, resumeFile);
+
+                        if (uploadError) {
+                            console.error('Supabase upload error:', uploadError);
+                            throw new Error('Failed to upload resume. Please try again.');
+                        }
+
+                        // 2. Get the public URL of the uploaded file
+                        const { data: urlData } = supabaseClient
+                            .storage
+                            .from('resumes')
+                            .getPublicUrl(filePath);
+                        
+                        resumePublicUrl = urlData.publicUrl;
+                    }
+
+                    // 3. Prepare data for the 'applications' table
+                    const applicationData = {
+                        full_name: formProps.fullName,
+                        email: formProps.email,
+                        phone: formProps.phone,
+                        location: formProps.location,
+                        role: formProps.role,
+                        message: formProps.message,
+                        portfolio_link: formProps.portfolio,
+                        resume_url: resumePublicUrl // Add the file URL to the record
+                    };
+
+                    // 4. Insert the form data into the database
+                    const { error: insertError } = await supabaseClient.from('applications').insert(applicationData);
+                    if (insertError) {
+                        console.error('Supabase insert error:', insertError);
+                        throw new Error('Failed to save application data.');
+                    }
+
+                    currentForm.parentElement.hidden = true;
+                    document.getElementById('success-container').hidden = false;
+                }
+            } catch (error) {
+                console.error('Submission failed:', error);
+                alert(`There was an error submitting your form: ${error.message}`);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        };
+
+        form.addEventListener('submit', handleFormSubmit);
+        notifyForm.addEventListener('submit', handleFormSubmit);
+
+        // Real-time validation on input change after first submit attempt
+        form.querySelectorAll('[required], input[type="email"], input[type="url"]').forEach(field => {
+            field.addEventListener('input', () => {
+                if (field.classList.contains('is-invalid')) {
+                    validateField(field);
+                }
+            });
+        });
+
+    });
+
+    /*
+    ================================================================================
+    SAMPLE COPY & ALT-TEXT (BONUS)
+    ================================================================================
+
+    SAMPLE PAGE COPY:
+    - Hero Description: "We are building a transparent, human-first donation and request
+      platform designed to bridge the gap between generosity and genuine need,
+      efficiently and with empathy."
+    - KPI/Intent Line: "Launching soon — Join us in building a better way to give."
+
+    ACCESSIBLE ALT-TEXT:
+    - The background consists of decorative, soft-focus, overlapping circular shapes
+      in muted shades of terracotta, green, and beige, creating a gentle sense of depth.
+      This is a purely aesthetic element and has no informational content.
+
+    ================================================================================
+    */
+
+    </script>
+</body>
+</html>
