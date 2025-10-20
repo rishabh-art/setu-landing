@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setu | Where giving meets needs.</title>
-    <meta name="description" content="Setu: A new human-first platform connecting those who want to give with those in need. Launching soon.">
+    <title>setu™ | Where giving meets needs.</title>
+    <meta name="description" content="setu™: A new human-first platform connecting those who want to give with those in need. Launching soon.">
 
     <!--
     ================================================================================================
-    README: SETU LANDING PAGE
+    README: setu™ LANDING PAGE
     ================================================================================================
 
     This is a self-contained 'Coming Soon' landing page. No build step is required.
@@ -216,7 +216,7 @@
         }
 
         h1 { font-size: 6rem; font-weight: 900; letter-spacing: -2px; }
-        .logo { font-family: var(--font-logo); font-size: 2rem; font-weight: 700; text-decoration: none; color: var(--color-text); animation: fadeInUp 0.5s ease-out backwards; }
+        .logo { font-family: var(--font-logo); font-size: 3.5rem; font-weight: 700; text-decoration: none; color: var(--color-text); animation: fadeInUp 0.5s ease-out backwards; text-shadow: 1px 2px 5px rgba(62, 39, 35, 0.12); }
         .tagline { font-family: var(--font-display); font-size: 2rem; margin-top: 0.5rem; color: var(--color-text-light); animation: fadeInUp 0.5s 0.2s ease-out backwards; }
         .description { font-size: 1.2rem; max-width: 600px; margin: 1.5rem auto 0; animation: fadeInUp 0.5s 0.4s ease-out backwards; }
         .kpi-line { font-family: var(--font-logo); font-weight: 500; margin-top: 2rem; font-size: 0.9rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--color-text-light); animation: fadeInUp 0.5s 0.6s ease-out backwards; }
@@ -233,6 +233,12 @@
             justify-content: center;
             flex-wrap: wrap;
             animation: fadeInUp 0.5s 0.8s ease-out backwards;
+        }
+
+        .brand-name {
+            font-family: var(--font-logo);
+            font-weight: 700;
+            color: var(--color-text);
         }
         
         .roles-preview {
@@ -467,16 +473,29 @@
         .footer-content {
             max-width: 600px;
             margin: 0 auto;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
         }
         .footer-content p {
             margin-bottom: 1.5rem;
         }
-        
+        .footer-content .attribution {
+            margin-top: -1rem;
+            margin-bottom: 0;
+        }
+        .footer-content a {
+            color: var(--color-text);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-content a:hover { color: var(--color-primary); }
         /* ==========================================================================
            9. Responsive Design
            ========================================================================== */
         @media (max-width: 768px) {
             h1 { font-size: 4rem; }
+            .logo { font-size: 3rem; }
             .tagline { font-size: 1.5rem; }
             .description { font-size: 1.1rem; }
             .container { padding: 0 1rem; }
@@ -489,6 +508,7 @@
 
         @media (max-width: 480px) {
             h1 { font-size: 3rem; }
+            .logo { font-size: 2.5rem; }
             .tagline { font-size: 1.25rem; }
             .description { font-size: 1rem; }
         }
@@ -513,9 +533,9 @@
     <main class="main-content">
         <div class="container">
             <header class="hero">
-                <a href="#" class="logo">Setu</a>
+                <a href="#" class="logo">setu™</a>
                 <p class="tagline">Where giving meets needs.</p>
-                <p class="description">We are building a space, a bridge, where we connect generosity, with those truly in need--in a simple yet powerful manner. Because it's not that our world does not have enough. It's that enough is improperly placed.</p>
+                <p class="description">We’re building a space — a bridge — that connects generosity with those truly in need, in a way that’s simple yet profoundly effective. Because the problem isn’t the lack of enough — it’s that enough isn’t where it’s needed most.</p>
                 <p class="kpi-line">Launching soon &mdash; Join us in building a better way to give.</p>
 
                 <div class="cta-buttons">
@@ -529,7 +549,8 @@
         
         <footer id="footer-notify">
             <div class="container footer-content">
-                <p>&copy; 2025 Setu. All rights reserved. Building a bridge for humanity.</p>
+                <p>&copy; 2025 <span class="brand-name" style="color: var(--color-text-light);">setu™</span>. All rights reserved. Building a bridge for humanity.</p>
+                <p class="attribution">Built with purpose and heart by <a href="https://me.palrishabh.com" target="_blank" rel="noopener noreferrer" data-interactive>Rishabh Pal</a>.</p>
             </div>
         </footer>
     </main>
@@ -567,7 +588,7 @@
         <div class="modal">
             <div id="form-container">
                 <div class="modal-header">
-                    <h2 id="modal-title">Work with Setu</h2>
+                    <h2 id="modal-title">Work with <span class="brand-name">setu™</span></h2>
                     <button class="modal-close-btn" aria-label="Close modal" data-interactive>&times;</button>
                 </div>
                 <form id="work-with-us-form" novalidate>
@@ -628,7 +649,7 @@
                     </div>
                     <div class="form-group checkbox-group">
                         <input type="checkbox" id="consent" name="consent" required data-interactive>
-                        <label for="consent">I agree to be contacted by Setu about this opportunity.</label>
+                        <label for="consent">I agree to be contacted by <span class="brand-name">setu™</span> about this opportunity.</label>
                     </div>
                      <div class="form-error" id="consent-error" style="margin-top:-1rem; margin-bottom:1rem; display: none;">You must agree to be contacted.</div>
 
@@ -641,7 +662,7 @@
             </div>
             <div id="success-container" class="success-message" hidden>
                 <h2>Thank You!</h2>
-                <p>We’ve received your interest. We appreciate you taking the time to reach out and will be in touch if there’s a potential fit. Meanwhile, follow Setu's journey!</p>
+                <p>We’ve received your interest. We appreciate you taking the time to reach out and will be in touch if there’s a potential fit. Meanwhile, follow <span class="brand-name">setu™'s</span> journey!</p>
                 <div class="modal-footer" style="justify-content:center; border-top:none; margin-top:1rem;">
                     <button type="button" class="btn btn-primary modal-close-btn" data-interactive>Close</button>
                 </div>
@@ -653,7 +674,7 @@
         <div style="padding: 2rem; text-align: center; background: #fff; color: #000;">
             <h1>JavaScript is Required</h1>
             <p>This page uses JavaScript for its interactive features and forms. Please enable JavaScript in your browser to continue.</p>
-            <p>To express interest in working with Setu, please email us at <a href="mailto:hello@setu.org">hello@setu.org</a>.</p>
+            <p>To express interest in working with <span class="brand-name">setu™</span>, please email us at <a href="mailto:hello@setu.org">hello@setu.org</a>.</p>
         </div>
     </noscript>
 
