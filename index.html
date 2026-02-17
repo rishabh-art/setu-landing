@@ -607,41 +607,23 @@
                         <input type="tel" id="phone" name="phone" class="form-control" data-interactive>
                     </div>
                     <div class="form-group">
-                        <label for="location">Location / City (Optional)</label>
-                        <input type="text" id="location" name="location" class="form-control" data-interactive>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
-                        <select id="role" name="role" class="form-control" required data-interactive>
-                            <option value="" disabled selected>Select a role...</option>
-                            <optgroup label="Director roles">
-                                <option value="Director of Operations">Director of Operations</option>
-                                <option value="Director of Communications and Outreach">Director of Communications and Outreach</option>
-                                <option value="Director of Technology">Director of Technology</option>
-                                <option value="Director of Design and Experience">Director of Design and Experience</option>
-                                <option value="Director of Marketing">Director of Marketing</option>
-                            </optgroup>
-                            <optgroup label="Core roles">
-                                <option value="Flutter Developer">Flutter Developer</option>
-                                <option value="Full Stack Developer">Full Stack Developer</option>
-                                <option value="Mobile App Developer">Mobile App Developer</option>
-                                <option value="Marketing Content Producer">Marketing Content Producer</option>
-                                <option value="Creative Content Writer">Creative Content Writer</option>
-                                <option value="Campus Ambassador">Campus Ambassador</option>
-                                <option value="Video Editor">Video Editor</option>
-                                <option value="Research & Insights Analyst">Research & Insights Analyst</option>
-                            </optgroup>
+                        <label for="department">Department</label>
+                        <select id="department" name="department" class="form-control" required data-interactive>
+                            <option value="" disabled selected>Select a department...</option>
+                            <option value="Operations">Operations</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Development">Development</option>
                         </select>
-                        <div class="form-error">Please select a role.</div>
+                        <div class="form-error">Please select a department.</div>
                     </div>
                     <div class="form-group">
-                        <label for="message">Why you want to join (Optional, max 800 characters)</label>
-                        <textarea id="message" name="message" class="form-control" maxlength="800" data-interactive></textarea>
+                        <label for="pitch">Pitch (Tell us about your idea / fit, max 800 characters)</label>
+                        <textarea id="pitch" name="pitch" class="form-control" maxlength="800" required data-interactive></textarea>
                     </div>
-                     <div class="form-group">
-                        <label for="portfolio">Resume / Portfolio Link (Optional)</label>
+                    <div class="form-group">
+                        <label for="portfolio">Portfolio Link (Optional)</label>
                         <input type="url" id="portfolio" name="portfolio" class="form-control" placeholder="https://..." data-interactive>
-                         <div class="form-error">Please enter a valid URL.</div>
+                        <div class="form-error">Please enter a valid URL.</div>
                     </div>
                     <div class="form-group">
                         <label for="resumeFile">Upload Resume (Optional)</label>
@@ -931,14 +913,15 @@
                     }
 
                     // 3. Prepare data for the 'applications' table
+                    // Keep DB fields expected by the backend; unused fields are set to null.
                     const applicationData = {
                         full_name: formProps.fullName,
                         email: formProps.email,
-                        phone: formProps.phone,
-                        location: formProps.location,
-                        role: formProps.role,
-                        message: formProps.message,
-                        portfolio_link: formProps.portfolio,
+                        phone: formProps.phone || null,
+                        location: null, // intentionally NULL for compatibility
+                        role: formProps.department || null, // department selected by applicant
+                        message: formProps.pitch, // map 'pitch' textarea to message column
+                        portfolio_link: formProps.portfolio || null,
                         resume_url: resumePublicUrl // Add the file URL to the record
                     };
 
