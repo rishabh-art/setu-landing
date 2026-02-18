@@ -278,6 +278,149 @@
             color: var(--color-text-light);
         }
 
+        /* ==========================================================================
+           5.5 Countdown Timer
+           ========================================================================== */
+        .countdown-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .countdown-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-logo);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-text);
+        }
+
+        .info-tooltip {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            cursor: help;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .info-tooltip:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .tooltip-text {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-text);
+            color: var(--color-white);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+            font-weight: 400;
+            white-space: nowrap;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            pointer-events: none;
+        }
+
+        .info-tooltip:hover .tooltip-text {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--color-text);
+        }
+
+        .countdown-timer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--color-primary);
+            font-family: var(--font-logo);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text-light);
+            margin-top: 0.25rem;
+        }
+
+        .countdown-separator {
+            align-self: center;
+            font-size: 1.5rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-closed {
+            font-size: 1.2rem;
+            color: var(--color-text-light);
+            padding: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .countdown-section {
+                padding: 1.5rem 1rem;
+            }
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+            .countdown-timer {
+                gap: 0.5rem;
+            }
+            .tooltip-text {
+                white-space: normal;
+                max-width: 200px;
+            }
+        }
+
 
         /* ==========================================================================
            6. Buttons & Forms
@@ -543,7 +686,59 @@
                     <button id="open-notify-modal-btn" class="btn btn-secondary" data-interactive>Notify me</button>
                 </div>
 
+                <div class="countdown-section">
+                    <div class="countdown-header">
+                        <span>Early Applications Closing In</span>
+                        <div class="info-tooltip" role="tooltip" data-interactive>
+                            <span>i</span>
+                            <span class="tooltip-text">Early applications show stronger interest. Get closer to our core team and shape setu™ from the start.</span>
+                        </div>
+                    </div>
+                    <div id="countdown-display">
+                        <div class="countdown-timer">
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="countdown-days">00</div>
+                                <div class="countdown-label">Days</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="countdown-hours">00</div>
+                                <div class="countdown-label">Hours</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="countdown-minutes">00</div>
+                                <div class="countdown-label">Minutes</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <div class="countdown-value" id="countdown-seconds">00</div>
+                                <div class="countdown-label">Seconds</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </header>
+
+            <section class="roles-preview">
+                <h2>Open Roles</h2>
+                <div class="roles-grid">
+                    <div class="role-card">
+                        <h3>Marketing</h3>
+                        <p>Amplify our mission through strategic storytelling, community building, and creative outreach across platforms. Shape how setu™ resonates with hearts and minds everywhere.</p>
+                    </div>
+                    <div class="role-card">
+                        <h3>Operations</h3>
+                        <p>Drive the backbone of setu™ through strategic planning, research, and on-ground execution. Research emerging challenges, plan for scale, and directly execute initiatives that matter.</p>
+                    </div>
+                    <div class="role-card">
+                        <h3>Development</h3>
+                        <p>Build the technology platform that powers setu™. Design and develop the interface connecting generosity with genuine need, requiring strong technical expertise and vision.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem; font-size: 0.95rem; color: var(--color-text-light);">All roles involve interviews to ensure alignment with setu™ standards and our mission.</p>
+            </section>
 
         </div>
         
@@ -690,6 +885,44 @@
         const form = document.getElementById('work-with-us-form');
         const notifyForm = document.getElementById('notify-me-form');
         const autoSizeInput = document.getElementById('notify-email');
+
+        // Countdown elements
+        const countdownDays = document.getElementById('countdown-days');
+        const countdownHours = document.getElementById('countdown-hours');
+        const countdownMinutes = document.getElementById('countdown-minutes');
+        const countdownSeconds = document.getElementById('countdown-seconds');
+        const countdownDisplay = document.getElementById('countdown-display');
+
+        // ==========================================================================
+        // COUNTDOWN TIMER
+        // ==========================================================================
+        const updateCountdown = () => {
+            // Target: February 21, 2026, 12:00 PM UTC
+            const targetDate = new Date('2026-02-21T12:00:00Z').getTime();
+            
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance <= 0) {
+                    clearInterval(timer);
+                    countdownDisplay.innerHTML = '<div class="countdown-closed">Early applications have closed. Thank you for your interest!</div>';
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownDays.textContent = String(days).padStart(2, '0');
+                countdownHours.textContent = String(hours).padStart(2, '0');
+                countdownMinutes.textContent = String(minutes).padStart(2, '0');
+                countdownSeconds.textContent = String(seconds).padStart(2, '0');
+            }, 1000);
+        };
+
+        updateCountdown();
 
         // ==========================================================================
         // CURSOR & INTERACTIVITY
