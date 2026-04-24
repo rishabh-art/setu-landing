@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>setu™ | Where giving meets needs.</title>
-    <meta name="description" content="setu™: A new human-first platform connecting those who want to give with those in need. Launching soon.">
+    <meta name="description" content="setu™: A new human-first platform connecting those who want to give with those in need.">
 
     <!--
     ================================================================================================
@@ -20,7 +20,7 @@
     - Fonts are loaded from Google Fonts below.
 
     2. FORM SUBMISSION ENDPOINT
-    - The "Work with us" and "Notify me" forms POST JSON data.
+    - The "Work with us" form POST JSON data.
     - To set your backend endpoint, find the `FORM_ENDPOINT` constant in the <script>
       tag at the bottom of this file and replace the placeholder URL.
     - A demo mode is enabled by default, which simulates a successful submission.
@@ -514,6 +514,65 @@
             transition: width 0.2s ease-in-out;
         }
 
+        /* Phone input with country code */
+        .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--color-white);
+        }
+        .phone-input-wrapper:focus-within {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(226, 114, 91, 0.2);
+        }
+        .country-code-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem 0.5rem 0.75rem 0.75rem;
+            background: #f5f5f5;
+            border-right: 1px solid #ddd;
+            color: var(--color-text);
+            font-size: 0.95rem;
+        }
+        .country-flag {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .country-code {
+            font-weight: 500;
+        }
+        .phone-input {
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+        .phone-input:focus {
+            box-shadow: none !important;
+        }
+
+        /* Role info text */
+        .role-info {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            font-style: italic;
+            display: none;
+        }
+        .role-info.visible {
+            display: block;
+        }
+
+        /* Subprompt text */
+        .subprompt-text {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
         .notify-form {
             display: flex;
             gap: 0.5rem;
@@ -679,66 +738,15 @@
                 <a href="#" class="logo">setu™</a>
                 <p class="tagline">Where giving meets needs.</p>
                 <p class="description">We’re building a space — a bridge — that connects generosity with those truly in need, in a way that’s simple yet profoundly effective. Because the problem isn’t the lack of enough — it’s that enough isn’t where it’s needed most.</p>
-                <p class="kpi-line">Launching soon &mdash; Join us in building a better way to give.</p>
+                <p class="kpi-line">Join us in building a better way to give.</p>
 
                 <div class="cta-buttons">
                     <button id="open-modal-btn" class="btn btn-primary" data-interactive>Work with us</button>
-                    <button id="open-notify-modal-btn" class="btn btn-secondary" data-interactive>Notify me</button>
-                </div>
-
-                <div class="countdown-section">
-                    <div class="countdown-header">
-                        <span>Early Applications Closing In</span>
-                        <div class="info-tooltip" role="tooltip" data-interactive>
-                            <span>i</span>
-                            <span class="tooltip-text">Early applications show stronger interest. Get closer to our core team and shape setu™ from the start.</span>
-                        </div>
-                    </div>
-                    <div id="countdown-display">
-                        <div class="countdown-timer">
-                            <div class="countdown-item">
-                                <div class="countdown-value" id="countdown-days">00</div>
-                                <div class="countdown-label">Days</div>
-                            </div>
-                            <div class="countdown-separator">:</div>
-                            <div class="countdown-item">
-                                <div class="countdown-value" id="countdown-hours">00</div>
-                                <div class="countdown-label">Hours</div>
-                            </div>
-                            <div class="countdown-separator">:</div>
-                            <div class="countdown-item">
-                                <div class="countdown-value" id="countdown-minutes">00</div>
-                                <div class="countdown-label">Minutes</div>
-                            </div>
-                            <div class="countdown-separator">:</div>
-                            <div class="countdown-item">
-                                <div class="countdown-value" id="countdown-seconds">00</div>
-                                <div class="countdown-label">Seconds</div>
-                            </div>
-                        </div>
-                    </div>
+                    <button id="open-partner-modal-btn" class="btn btn-secondary" data-interactive>Partner with us</button>
                 </div>
 
             </header>
 
-            <section class="roles-preview">
-                <h2>Open Roles</h2>
-                <div class="roles-grid">
-                    <div class="role-card">
-                        <h3>Marketing</h3>
-                        <p>Amplify our mission through strategic storytelling, community building, and creative outreach across platforms. Shape how setu™ resonates with hearts and minds everywhere.</p>
-                    </div>
-                    <div class="role-card">
-                        <h3>Operations</h3>
-                        <p>Drive the backbone of setu™ through strategic planning, research, and on-ground execution. Research emerging challenges, plan for scale, and directly execute initiatives that matter.</p>
-                    </div>
-                    <div class="role-card">
-                        <h3>Development</h3>
-                        <p>Build the technology platform that powers setu™. Design and develop the interface connecting generosity with genuine need, requiring strong technical expertise and vision.</p>
-                    </div>
-                </div>
-                <p style="margin-top: 2rem; font-size: 0.95rem; color: var(--color-text-light);">All roles involve interviews to ensure alignment with setu™ standards and our mission.</p>
-            </section>
 
         </div>
         
@@ -750,32 +758,6 @@
         </footer>
     </main>
 
-    <!-- "Notify me" Modal -->
-    <div class="modal-overlay" id="notify-me-modal" role="dialog" aria-modal="true" aria-labelledby="notify-modal-title" hidden>
-        <div class="modal" style="max-width: 500px;">
-            <div id="notify-form-container">
-                <div class="modal-header">
-                    <h2 id="notify-modal-title">Get Notified</h2>
-                    <button class="modal-close-btn" aria-label="Close modal" data-interactive>&times;</button>
-                </div>
-                <form id="notify-me-form" novalidate style="text-align: center; padding: 1rem 0;">
-                    <p style="margin-bottom: 1.5rem;">Enter your email to get notified when we launch.</p>
-                    <div class="form-group" style="margin-bottom: 2rem; text-align: center;">
-                        <input type="email" id="notify-email" name="email" class="form-control form-control-auto-size" placeholder="your.email@example.com" required data-interactive>
-                        <div class="form-error">Please enter a valid email address.</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" data-interactive>Notify me!</button>
-                </form>
-            </div>
-            <div id="notify-success-container" class="success-message" hidden>
-                <h2>You're on the list!</h2>
-                <p>Thank you for your interest. We'll send you an update as soon as we're ready to launch. Stay tuned!</p>
-                <div class="modal-footer" style="justify-content:center; border-top:none; margin-top:1rem;">
-                    <button type="button" class="btn btn-primary modal-close-btn" data-interactive>Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <!-- "Work with us" Modal -->
@@ -798,18 +780,25 @@
                         <div class="form-error">Please enter a valid email address.</div>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone (Optional)</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" data-interactive>
+                        <label for="phone">Phone</label>
+                        <div class="phone-input-wrapper">
+                            <span class="country-code-wrapper">
+                                <span class="country-flag" id="work-country-flag">🇮🇳</span>
+                                <span class="country-code" id="work-country-code">+91</span>
+                            </span>
+                            <input type="tel" id="phone" name="phone" class="form-control phone-input" required data-interactive>
+                        </div>
+                        <div class="form-error">Please enter your phone number.</div>
                     </div>
                     <div class="form-group">
-                        <label for="department">Department</label>
-                        <select id="department" name="department" class="form-control" required data-interactive>
-                            <option value="" disabled selected>Select a department...</option>
-                            <option value="Operations">Operations</option>
+                        <label for="role">Role</label>
+                        <select id="role" name="role" class="form-control" required data-interactive>
+                            <option value="" disabled selected>Select a role...</option>
+                            <option value="Microzone Activator">Microzone Activator</option>
                             <option value="Marketing">Marketing</option>
-                            <option value="Development">Development</option>
                         </select>
-                        <div class="form-error">Please select a department.</div>
+                        <div class="form-error">Please select a role.</div>
+                        <div class="role-info" id="role-info"></div>
                     </div>
                     <div class="form-group">
                         <label for="pitch">Pitch (Tell us about your idea / fit, max 800 characters)</label>
@@ -846,12 +835,80 @@
             </div>
         </div>
     </div>
+
+    <!-- "Partner with us" Modal -->
+    <div class="modal-overlay" id="partner-modal" role="dialog" aria-modal="true" aria-labelledby="partner-modal-title" hidden>
+        <div class="modal">
+            <div id="partner-form-container">
+                <div class="modal-header">
+                    <h2 id="partner-modal-title">Partner with <span class="brand-name">setu™</span></h2>
+                    <button class="modal-close-btn" aria-label="Close modal" data-interactive>&times;</button>
+                </div>
+                <form id="partner-form" novalidate>
+                    <div class="form-group">
+                        <label for="partnerOrgName">Organisation Name</label>
+                        <input type="text" id="partnerOrgName" name="orgName" class="form-control" required data-interactive>
+                        <div class="form-error">Please enter your organisation name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerEmail">Email</label>
+                        <input type="email" id="partnerEmail" name="email" class="form-control" required data-interactive>
+                        <div class="form-error">Please enter a valid email address.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerPhone">Phone</label>
+                        <div class="phone-input-wrapper">
+                            <span class="country-code-wrapper">
+                                <span class="country-flag" id="partner-country-flag">🇮🇳</span>
+                                <span class="country-code" id="partner-country-code">+91</span>
+                            </span>
+                            <input type="tel" id="partnerPhone" name="phone" class="form-control phone-input" required data-interactive>
+                        </div>
+                        <div class="form-error">Please enter your phone number.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerDetails">Details</label>
+                        <div class="subprompt-text">What does your organisation do? How would setu™ help your organisation in your operations?</div>
+                        <textarea id="partnerDetails" name="details" class="form-control" maxlength="800" required data-interactive></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerWebsite">Official Organisation Website</label>
+                        <input type="url" id="partnerWebsite" name="website" class="form-control" placeholder="https://..." required data-interactive>
+                        <div class="form-error">Please enter a valid URL.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerAdditional">Any additional details</label>
+                        <div class="subprompt-text">Anything else you want us to know? Upload a document.</div>
+                        <input type="file" id="partnerAdditional" name="additionalDetails" class="form-control" data-interactive>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="partnerConsent" name="consent" required data-interactive>
+                        <label for="partnerConsent">I agree to be contacted by <span class="brand-name">setu™</span> about this partnership.</label>
+                    </div>
+                     <div class="form-error" id="partner-consent-error" style="margin-top:-1rem; margin-bottom:1rem; display: none;">You must agree to be contacted.</div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary modal-cancel-btn" data-interactive>Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-interactive>Send Partnership Intent</button>
+                    </div>
+                </form>
+            </div>
+            <div id="partner-success-container" class="success-message" hidden>
+                <h2>Thank You!</h2>
+                <p>We've received your partnership interest. We appreciate you taking the time to reach out and will be in touch if there's a potential fit. Meanwhile, follow <span class="brand-name">setu™'s</span> journey!</p>
+                <div class="modal-footer" style="justify-content:center; border-top:none; margin-top:1rem;">
+                    <button type="button" class="btn btn-primary modal-close-btn" data-interactive>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <noscript>
         <div style="padding: 2rem; text-align: center; background: #fff; color: #000;">
             <h1>JavaScript is Required</h1>
             <p>This page uses JavaScript for its interactive features and forms. Please enable JavaScript in your browser to continue.</p>
-            <p>To express interest in working with <span class="brand-name">setu™</span>, please email us at <a href="mailto:hello@setu.org">hello@setu.org</a>.</p>
+            <p>To express interest in working with <span class="brand-name">setu™</span>, please email us at <a href="mailto:setu@palrishabh.com">setu@palrishabh.com</a>.</p>
         </div>
     </noscript>
 
@@ -877,52 +934,116 @@
         const parallaxShapes = document.querySelectorAll('.parallax-bg .shape');
         const interactiveEls = document.querySelectorAll('[data-interactive]');
         const modal = document.getElementById('work-with-us-modal');
-        const notifyModal = document.getElementById('notify-me-modal');
+        const partnerModal = document.getElementById('partner-modal');
         const openModalBtn = document.getElementById('open-modal-btn');
-        const openNotifyModalBtn = document.getElementById('open-notify-modal-btn');
+        const openPartnerModalBtn = document.getElementById('open-partner-modal-btn');
         const closeModalBtns = modal.querySelectorAll('.modal-close-btn, .modal-cancel-btn');
-        const closeNotifyModalBtns = notifyModal.querySelectorAll('.modal-close-btn');
+        const partnerCloseModalBtns = partnerModal.querySelectorAll('.modal-close-btn, .modal-cancel-btn');
         const form = document.getElementById('work-with-us-form');
-        const notifyForm = document.getElementById('notify-me-form');
-        const autoSizeInput = document.getElementById('notify-email');
+        const partnerForm = document.getElementById('partner-form');
 
-        // Countdown elements
-        const countdownDays = document.getElementById('countdown-days');
-        const countdownHours = document.getElementById('countdown-hours');
-        const countdownMinutes = document.getElementById('countdown-minutes');
-        const countdownSeconds = document.getElementById('countdown-seconds');
-        const countdownDisplay = document.getElementById('countdown-display');
+        // Role info text
+        const roleSelect = document.getElementById('role');
+        const roleInfo = document.getElementById('role-info');
 
-        // ==========================================================================
-        // COUNTDOWN TIMER
-        // ==========================================================================
-        const updateCountdown = () => {
-            // Target: February 21, 2026, 12:00 PM UTC
-            const targetDate = new Date('2026-02-21T12:00:00Z').getTime();
-            
-            const timer = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance <= 0) {
-                    clearInterval(timer);
-                    countdownDisplay.innerHTML = '<div class="countdown-closed">Early applications have closed. Thank you for your interest!</div>';
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownDays.textContent = String(days).padStart(2, '0');
-                countdownHours.textContent = String(hours).padStart(2, '0');
-                countdownMinutes.textContent = String(minutes).padStart(2, '0');
-                countdownSeconds.textContent = String(seconds).padStart(2, '0');
-            }, 1000);
+        // Country code data
+        const countryData = {
+            'IN': { flag: '🇮🇳', code: '+91' },
+            'US': { flag: '🇺🇸', code: '+1' },
+            'GB': { flag: '🇬🇧', code: '+44' },
+            'AU': { flag: '🇦🇺', code: '+61' },
+            'CA': { flag: '🇨🇦', code: '+1' },
+            'DE': { flag: '🇩🇪', code: '+49' },
+            'FR': { flag: '🇫🇷', code: '+33' },
+            'JP': { flag: '🇯🇵', code: '+81' },
+            'BR': { flag: '🇧🇷', code: '+55' },
+            'NG': { flag: '🇳🇬', code: '+234' },
+            'ZA': { flag: '🇿🇦', code: '+27' },
+            'AE': { flag: '🇦🇪', code: '+971' },
+            'SG': { flag: '🇸🇬', code: '+65' },
+            'MY': { flag: '🇲🇾', code: '+60' },
+            'ID': { flag: '🇮🇩', code: '+62' },
+            'TH': { flag: '🇹🇭', code: '+66' },
+            'PH': { flag: '🇵🇭', code: '+63' },
+            'VN': { flag: '🇻🇳', code: '+84' },
+            'PK': { flag: '🇵🇰', code: '+92' },
+            'BD': { flag: '🇧🇩', code: '+880' },
+            'LK': { flag: '🇱🇰', code: '+94' },
+            'NP': { flag: '🇳🇵', code: '+977' },
+            'US': { flag: '🇺🇸', code: '+1' },
+            'GB': { flag: '🇬🇧', code: '+44' },
+            'default': { flag: '🌍', code: '+' }
         };
 
-        updateCountdown();
+        // Detect country from phone number
+        const detectCountry = (phone) => {
+            if (!phone) return countryData['IN']; // Default to India
+            const cleanPhone = phone.replace(/\D/g, '');
+            
+            // Common country code patterns
+            if (cleanPhone.startsWith('91') && cleanPhone.length > 2) {
+                return countryData['IN'];
+            }
+            if ((cleanPhone.startsWith('1') || cleanPhone.length === 10) && (cleanPhone.startsWith('1') || cleanPhone.length === 10)) {
+                return countryData['US'];
+            }
+            if (cleanPhone.startsWith('44')) return countryData['GB'];
+            if (cleanPhone.startsWith('61')) return countryData['AU'];
+            if (cleanPhone.startsWith('49')) return countryData['DE'];
+            if (cleanPhone.startsWith('33')) return countryData['FR'];
+            if (cleanPhone.startsWith('81')) return countryData['JP'];
+            if (cleanPhone.startsWith('55')) return countryData['BR'];
+            if (cleanPhone.startsWith('234')) return countryData['NG'];
+            if (cleanPhone.startsWith('27')) return countryData['ZA'];
+            if (cleanPhone.startsWith('971')) return countryData['AE'];
+            if (cleanPhone.startsWith('65')) return countryData['SG'];
+            if (cleanPhone.startsWith('60')) return countryData['MY'];
+            if (cleanPhone.startsWith('62')) return countryData['ID'];
+            if (cleanPhone.startsWith('66')) return countryData['TH'];
+            if (cleanPhone.startsWith('63')) return countryData['PH'];
+            if (cleanPhone.startsWith('84')) return countryData['VN'];
+            if (cleanPhone.startsWith('92')) return countryData['PK'];
+            if (cleanPhone.startsWith('880')) return countryData['BD'];
+            if (cleanPhone.startsWith('94')) return countryData['LK'];
+            if (cleanPhone.startsWith('977')) return countryData['NP'];
+            
+            return countryData['IN']; // Default to India
+        };
+
+        // Update country display for work form
+        const workPhoneInput = document.getElementById('phone');
+        if (workPhoneInput) {
+            workPhoneInput.addEventListener('input', function() {
+                const detected = detectCountry(this.value);
+                document.getElementById('work-country-flag').textContent = detected.flag;
+                document.getElementById('work-country-code').textContent = detected.code;
+            });
+        }
+
+        // Update country display for partner form
+        const partnerPhoneInput = document.getElementById('partnerPhone');
+        if (partnerPhoneInput) {
+            partnerPhoneInput.addEventListener('input', function() {
+                const detected = detectCountry(this.value);
+                document.getElementById('partner-country-flag').textContent = detected.flag;
+                document.getElementById('partner-country-code').textContent = detected.code;
+            });
+        }
+
+        // Role info text display
+        if (roleSelect && roleInfo) {
+            roleSelect.addEventListener('change', function() {
+                if (this.value === 'Microzone Activator') {
+                    roleInfo.textContent = 'Start and lead setu™ in your microzone';
+                    roleInfo.classList.add('visible');
+                } else if (this.value === 'Marketing') {
+                    roleInfo.textContent = 'Help scale setu™ with creative and analytical skills';
+                    roleInfo.classList.add('visible');
+                } else {
+                    roleInfo.classList.remove('visible');
+                }
+            });
+        }
 
         // ==========================================================================
         // CURSOR & INTERACTIVITY
@@ -937,20 +1058,6 @@
             el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
 
-        // Auto-sizing input logic
-        if (autoSizeInput) {
-            const hiddenSizer = document.createElement('span');
-            hiddenSizer.style.font = getComputedStyle(autoSizeInput).font;
-            hiddenSizer.style.visibility = 'hidden';
-            hiddenSizer.style.position = 'absolute';
-            hiddenSizer.style.whiteSpace = 'pre';
-            document.body.appendChild(hiddenSizer);
-
-            autoSizeInput.addEventListener('input', () => {
-                hiddenSizer.textContent = autoSizeInput.value || autoSizeInput.placeholder;
-                autoSizeInput.style.width = `${hiddenSizer.offsetWidth + 4}px`; // +4 for a little padding
-            });
-        }
 
 
         // ==========================================================================
@@ -1024,18 +1131,18 @@
         };
 
         openModalBtn.addEventListener('click', () => openModal(modal));
-        openNotifyModalBtn.addEventListener('click', () => openModal(notifyModal));
+        openPartnerModalBtn.addEventListener('click', () => openModal(partnerModal));
         closeModalBtns.forEach(btn => btn.addEventListener('click', () => closeModal(modal)));
-        closeNotifyModalBtns.forEach(btn => btn.addEventListener('click', () => closeModal(notifyModal)));
+        partnerCloseModalBtns.forEach(btn => btn.addEventListener('click', () => closeModal(partnerModal)));
         
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
-        notifyModal.addEventListener('click', (e) => { if (e.target === notifyModal) closeModal(notifyModal); });
+        partnerModal.addEventListener('click', (e) => { if (e.target === partnerModal) closeModal(partnerModal); });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('is-visible')) {
                 closeModal(modal);
-            } else if (e.key === 'Escape' && notifyModal.classList.contains('is-visible')) {
-                closeModal(notifyModal);
+            } else if (e.key === 'Escape' && partnerModal.classList.contains('is-visible')) {
+                closeModal(partnerModal);
             }
         });
 
@@ -1101,24 +1208,15 @@
             submitButton.textContent = 'Submitting...';
 
             try {
-                // --- NOTIFY ME FORM SUBMISSION ---
-                if (currentForm.id === 'notify-me-form') {
-                    const email = currentForm.querySelector('#notify-email').value;
-                    const { error } = await supabaseClient
-                        .from('subscribers')
-                        .insert({ email: email });
-
-                    if (error) throw error;
-
-                    currentForm.parentElement.hidden = true;
-                    document.getElementById('notify-success-container').hidden = false;
-                }
-
                 // --- WORK WITH US FORM SUBMISSION ---
                 if (currentForm.id === 'work-with-us-form') {
                     const formData = new FormData(currentForm);
                     const formProps = Object.fromEntries(formData.entries());
                     let resumePublicUrl = null;
+
+                    // Get country code for phone
+                    const workCountryCode = document.getElementById('work-country-code').textContent;
+                    const fullPhone = workCountryCode + (formProps.phone || '');
 
                     // 1. Handle File Upload if a file is selected
                     const resumeFile = formProps.resumeFile;
@@ -1150,9 +1248,9 @@
                     const applicationData = {
                         full_name: formProps.fullName,
                         email: formProps.email,
-                        phone: formProps.phone || null,
+                        phone: fullPhone || null,
                         location: null, // intentionally NULL for compatibility
-                        role: formProps.department || null, // department selected by applicant
+                        role: formProps.role || null, // role selected by applicant
                         message: formProps.pitch, // map 'pitch' textarea to message column
                         portfolio_link: formProps.portfolio || null,
                         resume_url: resumePublicUrl // Add the file URL to the record
@@ -1168,6 +1266,64 @@
                     currentForm.parentElement.hidden = true;
                     document.getElementById('success-container').hidden = false;
                 }
+
+                // --- PARTNER WITH US FORM SUBMISSION ---
+                if (currentForm.id === 'partner-form') {
+                    const formData = new FormData(currentForm);
+                    const formProps = Object.fromEntries(formData.entries());
+                    let additionalFileUrl = null;
+
+                    // Get country code for phone
+                    const partnerCountryCode = document.getElementById('partner-country-code').textContent;
+                    const fullPhone = partnerCountryCode + (formProps.phone || '');
+
+                    // 1. Handle File Upload if a file is selected
+                    const additionalFile = formProps.additionalDetails;
+                    if (additionalFile && additionalFile.size > 0) {
+                        // Create a unique file path to avoid name collisions
+                        const filePath = `partners/${Date.now()}-${additionalFile.name.replace(/\s/g, '_')}`;
+                        
+                        const { data: uploadData, error: uploadError } = await supabaseClient
+                            .storage
+                            .from('resumes') // Using same bucket for partner files
+                            .upload(filePath, additionalFile);
+
+                        if (uploadError) {
+                            console.error('Supabase upload error:', uploadError);
+                            throw new Error('Failed to upload file. Please try again.');
+                        }
+
+                        // 2. Get the public URL of the uploaded file
+                        const { data: urlData } = supabaseClient
+                            .storage
+                            .from('resumes')
+                            .getPublicUrl(filePath);
+                        
+                        additionalFileUrl = urlData.publicUrl;
+                    }
+
+                    // 3. Prepare data for the 'applications' table with Partnership role
+                    const partnershipData = {
+                        full_name: formProps.orgName,
+                        email: formProps.email,
+                        phone: fullPhone || null,
+                        location: null,
+                        role: 'Partnership', // Automatically set as Partnership
+                        message: formProps.details, // map 'details' textarea to message column
+                        portfolio_link: formProps.website || null,
+                        resume_url: additionalFileUrl // Add the file URL to the record
+                    };
+
+                    // 4. Insert the form data into the database
+                    const { error: insertError } = await supabaseClient.from('applications').insert(partnershipData);
+                    if (insertError) {
+                        console.error('Supabase insert error:', insertError);
+                        throw new Error('Failed to save partnership data.');
+                    }
+
+                    currentForm.parentElement.hidden = true;
+                    document.getElementById('partner-success-container').hidden = false;
+                }
             } catch (error) {
                 console.error('Submission failed:', error);
                 alert(`There was an error submitting your form: ${error.message}`);
@@ -1178,7 +1334,7 @@
         };
 
         form.addEventListener('submit', handleFormSubmit);
-        notifyForm.addEventListener('submit', handleFormSubmit);
+        partnerForm.addEventListener('submit', handleFormSubmit);
 
         // Real-time validation on input change after first submit attempt
         form.querySelectorAll('[required], input[type="email"], input[type="url"]').forEach(field => {
@@ -1200,7 +1356,7 @@
     - Hero Description: "We are building a transparent, human-first donation and request
       platform designed to bridge the gap between generosity and genuine need,
       efficiently and with empathy."
-    - KPI/Intent Line: "Launching soon — Join us in building a better way to give."
+    - KPI/Intent Line: "Join us in building a better way to give."
 
     ACCESSIBLE ALT-TEXT:
     - The background consists of decorative, soft-focus, overlapping circular shapes
