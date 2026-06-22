@@ -794,8 +794,12 @@
                         <label for="role">Role</label>
                         <select id="role" name="role" class="form-control" required data-interactive>
                             <option value="" disabled selected>Select a role...</option>
-                            <option value="Microzone Activator">Microzone Activator</option>
-                            <option value="Marketing">Marketing</option>
+                            <option value="Microzone Leader">Microzone Leader</option>
+                            <option value="Student Institutional Representative">Student Institutional Representative</option>
+                            <option value="Marketing Member">Marketing Member</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Strategy">Strategy</option>
+                            <option value="Finance">Finance</option>
                         </select>
                         <div class="form-error">Please select a role.</div>
                         <div class="role-info" id="role-info"></div>
@@ -970,8 +974,6 @@
             'BD': { flag: '🇧🇩', code: '+880' },
             'LK': { flag: '🇱🇰', code: '+94' },
             'NP': { flag: '🇳🇵', code: '+977' },
-            'US': { flag: '🇺🇸', code: '+1' },
-            'GB': { flag: '🇬🇧', code: '+44' },
             'default': { flag: '🌍', code: '+' }
         };
 
@@ -1033,11 +1035,17 @@
         // Role info text display
         if (roleSelect && roleInfo) {
             roleSelect.addEventListener('change', function() {
-                if (this.value === 'Microzone Activator') {
-                    roleInfo.textContent = 'Start and lead setu™ in your microzone';
-                    roleInfo.classList.add('visible');
-                } else if (this.value === 'Marketing') {
-                    roleInfo.textContent = 'Help scale setu™ with creative and analytical skills';
+                const descriptions = {
+                    'Microzone Leader': 'Activate, manage, and coordinate localized setu™ hubs within your community.',
+                    'Student Institutional Representative': 'Act as our primary student liaison to bridge setu™ inside your school, college, or academic institution.',
+                    'Marketing Member': 'Amplify our footprint across social channels and analyze real-world metrics to meaningfully capture and scale our audience.',
+                    'Developer': 'Build scalable structures across our technology landscape (Frontend, Backend, UI/UX, AI/ML, or Security).',
+                    'Strategy': 'Analyze target performance data, interpret growth metrics, and plan our future roadmaps.',
+                    'Finance': 'Develop transactional reporting metrics, protect fiscal stability, and align systemic cross-functional budgets for long-term growth.'
+                };
+
+                if (descriptions[this.value]) {
+                    roleInfo.textContent = descriptions[this.value];
                     roleInfo.classList.add('visible');
                 } else {
                     roleInfo.classList.remove('visible');
