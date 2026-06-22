@@ -443,7 +443,7 @@
         .btn-primary:hover { background-color: #d6634c; }
 
         .btn-secondary { background-color: transparent; color: var(--color-primary); border-color: var(--color-primary); }
-        .btn-secondary:hover { background-color: var(--color-primary); color: var(--color-white); }
+        .btn-secondary:hover { background-color: var(--color-primary); color: var(--white); }
 
         .form-group {
             margin-bottom: 1.25rem;
@@ -794,6 +794,7 @@
                         <label for="role">Role</label>
                         <select id="role" name="role" class="form-control" required data-interactive>
                             <option value="" disabled selected>Select a role...</option>
+                            <option value="Volunteer">Volunteer</option>
                             <option value="Microzone Leader">Microzone Leader</option>
                             <option value="Student Institutional Representative">Student Institutional Representative</option>
                             <option value="Marketing Member">Marketing Member</option>
@@ -1036,6 +1037,7 @@
         if (roleSelect && roleInfo) {
             roleSelect.addEventListener('change', function() {
                 const descriptions = {
+                    'Volunteer': 'Come together on the ground to spark actionable changes and drive direct community impact.',
                     'Microzone Leader': 'Activate, manage, and coordinate localized setu™ hubs within your community.',
                     'Student Institutional Representative': 'Act as our primary student liaison to bridge setu™ inside your school, college, or academic institution.',
                     'Marketing Member': 'Amplify our footprint across social channels and analyze real-world metrics to meaningfully capture and scale our audience.',
